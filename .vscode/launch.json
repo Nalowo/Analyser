@@ -27,6 +27,17 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "lldb Launch Analyser",
+            "program": "${workspaceFolder}/build/build/analyser",
+            "args": [
+                "-f",
+                "${workspaceFolder}/files/sample.py"
+            ],
+            "cwd": "${workspaceFolder}/build"
         }
     ]
 }

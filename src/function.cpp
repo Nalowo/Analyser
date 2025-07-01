@@ -110,9 +110,16 @@ FunctionExtractor::FindEnclosingClass(const std::string &ast, const FunctionName
         size_t coord_end = ast.find(']', coord_start);
         std::string coords = ast.substr(coord_start + 1, coord_end - coord_start - 1);
 
+        auto throughSpaces = [](const auto& str, auto comma)
+        {
+            if (auto i = str.find_first_not_of(' ', comma + 1); i != std::string::npos)
+                return i;
+            return comma;
+        };
+
         size_t comma = coords.find(',');
         Position class_start{static_cast<size_t>(ToInt(coords.substr(0, comma))),
-                             static_cast<size_t>(ToInt(coords.substr(comma + 1)))};
+                             static_cast<size_t>(ToInt(coords.substr(throughSpaces(coords, comma))))};
 
         size_t dash = ast.find('-', coord_end);
         size_t second_coord_start = ast.find('[', dash);
@@ -121,7 +128,7 @@ FunctionExtractor::FindEnclosingClass(const std::string &ast, const FunctionName
 
         comma = end_coords.find(',');
         Position class_end{static_cast<size_t>(ToInt(end_coords.substr(0, comma))),
-                           static_cast<size_t>(ToInt(end_coords.substr(comma + 1)))};
+                           static_cast<size_t>(ToInt(end_coords.substr(throughSpaces(end_coords, comma))))};
 
         if (func_loc.start.line > class_start.line ||
             (func_loc.start.line == class_start.line && func_loc.start.col >= class_start.col)) {

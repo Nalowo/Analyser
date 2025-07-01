@@ -26,17 +26,26 @@
 #include "metric_accumulator_impl/accumulators.hpp"
 #include "metric_impl/metrics.hpp"
 
+namespace metric_impl = analyser::metric::metric_impl;
+namespace accamulator_impl = analyser::metric_accumulator::metric_accumulator_impl;
+namespace accumulator_interface = analyser::metric_accumulator;
+
 int main(int argc, char *argv[]) {
     analyser::cmd::ProgramOptions options;
-    // распарсите входные параметры
+    if( !options.Parse( argc, argv ) )
+        return 0;
 
-    // analyser::metric::MetricExtractor metric_extractor;
-    // зарегистрируйте метрики в metric_extractor
+    const std::vector<std::string>& inFiles = options.GetFiles();
 
-    // запустите analyser::AnalyseFunctions
-    // выведете результаты анализа на консоль
+    analyser::metric::MetricExtractor extractor;
+    extractor.RegisterMetric( std::make_unique<metric_impl::CodeLinesCountMetric>() );
+    // extractor.RegisterMetric( std::make_unique<metric_impl::CountParametersMetric>() );
+    // extractor.RegisterMetric( std::make_unique<metric_impl::CyclomaticComplexityMetric>() );
+    // extractor.RegisterMetric( std::make_unique<metric_impl::NamingStyleMetric>() );
 
-    // analyser::metric_accumulator::MetricsAccumulator accumulator;
+    auto analyse = analyser::AnalyseFunctions(inFiles, extractor);
+
+    analyser::metric_accumulator::MetricsAccumulator accumulator;
     // зарегистрируйте аккумуляторы метрик в accumulator
 
     // запустите analyser::SplitByFiles

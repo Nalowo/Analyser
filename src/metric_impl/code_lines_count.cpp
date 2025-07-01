@@ -19,6 +19,14 @@
 
 namespace analyser::metric::metric_impl {
 
-// здесь ваш код
+MetricResult::ValueType CodeLinesCountMetric::CalculateImpl(const function::Function &f) const
+{
+    int stop = 0;
+}
+std::string CodeLinesCountMetric::Name() const
+{
+    using namespace std::string_literals;
+    return "CodeLinesCountMetric"s;
+}
 
 }  // namespace analyser::metric::metric_impl

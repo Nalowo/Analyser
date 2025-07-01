@@ -27,9 +27,23 @@ namespace analyser {
 namespace rv = std::ranges::views;
 namespace rs = std::ranges;
 
+using namespace analyser::metric;
+using namespace analyser::file;
+using namespace analyser::function;
+
 auto AnalyseFunctions(const std::vector<std::string> &files,
                       const analyser::metric::MetricExtractor &metric_extractor) {
-    // здесь ваш код
+    std::vector<std::pair<Function, MetricResults>> result;
+    FunctionExtractor extractor;
+
+    for (const auto& file : files)
+    {
+        const File f(file);
+        auto a = extractor.Get(f);
+        int stop = 0;
+    }
+
+    return result;
 }
 
 auto SplitByClasses(const auto &analysis) {
