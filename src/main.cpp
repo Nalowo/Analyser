@@ -30,15 +30,16 @@ namespace metric_impl = analyser::metric::metric_impl;
 namespace accamulator_impl = analyser::metric_accumulator::metric_accumulator_impl;
 namespace accumulator_interface = analyser::metric_accumulator;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     analyser::cmd::ProgramOptions options;
-    if( !options.Parse( argc, argv ) )
+    if (!options.Parse(argc, argv))
         return 0;
 
-    const std::vector<std::string>& inFiles = options.GetFiles();
+    const std::vector<std::string> &inFiles = options.GetFiles();
 
     analyser::metric::MetricExtractor extractor;
-    extractor.RegisterMetric( std::make_unique<metric_impl::CodeLinesCountMetric>() );
+    extractor.RegisterMetric(std::make_unique<metric_impl::CodeLinesCountMetric>());
     // extractor.RegisterMetric( std::make_unique<metric_impl::CountParametersMetric>() );
     // extractor.RegisterMetric( std::make_unique<metric_impl::CyclomaticComplexityMetric>() );
     // extractor.RegisterMetric( std::make_unique<metric_impl::NamingStyleMetric>() );

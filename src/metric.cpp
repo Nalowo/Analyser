@@ -20,15 +20,23 @@
 
 #include "function.hpp"
 
-namespace analyser::metric {
+namespace analyser::metric
+{
 
-void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric) {
-    metrics.push_back(std::move(metric));
-}
+    void MetricExtractor::RegisterMetric(std::unique_ptr<IMetric> metric)
+    {
+        metrics.push_back(std::move(metric));
+    }
 
-MetricResults MetricExtractor::Get(const function::Function &func) const {
-    // здесь ваш код
-    return {};
-}
+    MetricResults MetricExtractor::Get(const function::Function &func) const
+    {
+        MetricResults result;
+        result.reserve(metrics.size());
 
-}  // namespace analyser::metric
+        std::ranges::transform(metrics, std::back_inserter(result),
+                               [&func](const auto &metric)
+                               { return metric->Calculate(func); });
+        return result;
+    }
+
+} // namespace analyser::metric
