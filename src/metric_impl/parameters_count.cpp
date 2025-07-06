@@ -14,38 +14,46 @@
 #include <variant>
 #include <vector>
 
-namespace analyser::metric::metric_impl {
+namespace rv = std::ranges::views;
+namespace rs = std::ranges;
+namespace vs = std::views;
 
-MetricResult::ValueType CountParametersMetric::CalculateImpl(const function::Function &f) const
+namespace analyser::metric::metric_impl
 {
-    std::string_view astView = f.ast;
-    auto pos = astView.find("(parameters");
-    if (pos == std::string::npos)
-        return static_cast<MetricResult::ValueType>(0);
-    astView = astView.substr(pos);
-
-    pos = 1;
-    auto parametersView = astView | std::views::drop(1) | std::views::take_while([&pos](char c)
+    MetricResult::ValueType CountParametersMetric::CalculateImpl(const function::Function &f) const
     {
-        if (pos < 1)
-            return false;
-        c == '(' ? ++pos : (c == ')' ? --pos : 0);
-        return true;
-    });
+        MetricResult::ValueType res{0};
+        std::string_view astView = f.ast;
+        if (auto pos = astView.find("(parameters"); pos != std::string::npos)
+            astView = astView.substr(pos);
+        else return res;
 
+        astView = [](std::string_view str)
+        {
+            size_t pos = 1;
+            auto parametersView = str | vs::drop(1) | vs::take_while([&pos](char c)
+            {
+                c == '(' ? ++pos : (c == ')' ? --pos : 0);
+                return pos > 0; 
+            });
+            return std::string_view{std::to_address(parametersView.begin()), static_cast<std::string_view::size_type>(rs::distance(parametersView))};
+        }(astView);
 
-    std::ranges::for_each(parametersView, [](char c)
+        res = [](std::string_view str)
+        {
+            size_t pos = 0, counter = 0;
+            rs::for_each(str, [&](char c)
+            {
+                c == '(' ? (pos == 0 ? ++counter : 0), ++pos : (c == ')' ? --pos : 0);
+            });
+            return counter;
+        }(astView);
+        return res;
+    }
+
+    std::string CountParametersMetric::Name() const
     {
-        std::cout << c;
-    });
-    std::cout << '\n';
-    int stop = 0;
-    return 0;
-}
+        return "ParametersCount";
+    }
 
-std::string CountParametersMetric::Name() const
-{ 
-    return "ParametersCount";
-}
-
-}  // namespace analyser::metric::metric_impl
+} // namespace analyser::metric::metric_impl
