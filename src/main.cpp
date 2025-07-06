@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     analyser::metric::MetricExtractor extractor;
     extractor.RegisterMetric(std::make_unique<metric_impl::CodeLinesCountMetric>());
     extractor.RegisterMetric( std::make_unique<metric_impl::CountParametersMetric>() );
-    // extractor.RegisterMetric( std::make_unique<metric_impl::CyclomaticComplexityMetric>() );
+    extractor.RegisterMetric( std::make_unique<metric_impl::CyclomaticComplexityMetric>() );
     // extractor.RegisterMetric( std::make_unique<metric_impl::NamingStyleMetric>() );
 
     auto analyse = analyser::AnalyseFunctions(inFiles, extractor);
