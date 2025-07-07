@@ -34,27 +34,34 @@ namespace analyser
     using namespace analyser::function;
     using namespace analyser::metric_accumulator;
 
+    using AnalysisResults = std::vector<std::pair<function::Function, metric::MetricResults>>;
+
     auto AnalyseFunctions(const std::vector<std::string> &files,
                           const MetricExtractor &metric_extractor)
     {
-        std::vector<std::pair<Function, MetricResults>> result;
+        AnalysisResults result;
         FunctionExtractor fExtractor;
 
         auto functionsList = files | vs::transform([&fExtractor](const auto &fileName)
-                                                   { return fExtractor.Get(File(fileName)); }) |
-                             vs::join | vs::transform([&metric_extractor](const auto &f)
-                                                      { return std::make_pair(f, metric_extractor.Get(f)); });
+        { 
+            return fExtractor.Get(File(fileName)); 
+        }) | vs::join | vs::transform([&metric_extractor](const auto &f)
+        { 
+            return std::make_pair(f, metric_extractor.Get(f)); 
+        });
         result.reserve(rs::distance(functionsList));
         rs::copy(functionsList, std::back_inserter(result));
         return result;
     }
 
-    auto SplitByClasses(const auto &analysis)
+    auto SplitByClasses(const AnalysisResults &analysis)
     {
-        // здесь ваш код
+        AnalysisResults result;
+        
+        return result;
     }
 
-    auto SplitByFiles(const auto &analysis)
+    auto SplitByFiles(const AnalysisResults &analysis)
     {
         // здесь ваш код
     }

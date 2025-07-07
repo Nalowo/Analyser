@@ -26,11 +26,9 @@ struct SumAverageAccumulator : public IAccumulator {
         double average;
         auto operator<=>(const SumAverage &) const = default;
     };
-    void Accumulate(const metric::MetricResult &metric_result) override;
-
-    virtual void Finalize() override;
-
-    virtual void Reset() override;
+    void Accumulate(const metric::MetricResult &metric_result) final;
+    void Finalize() final;
+    void Reset() final;
 
     SumAverage Get() const;
 

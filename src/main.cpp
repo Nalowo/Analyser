@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
     auto analyse = analyser::AnalyseFunctions(inFiles, extractor);
 
     analyser::metric_accumulator::MetricsAccumulator accumulator;
+    accumulator.RegisterAccumulator( "CodeLinesCountMetric", std::make_unique<accamulator_impl::SumAverageAccumulator>() );
+    accumulator.RegisterAccumulator( "CyclomaticComplexityMetric", std::make_unique<accamulator_impl::SumAverageAccumulator>() );
+    accumulator.RegisterAccumulator( "CountParametersMetric", std::make_unique<accamulator_impl::AverageAccumulator>() );
     // зарегистрируйте аккумуляторы метрик в accumulator
 
     // запустите analyser::SplitByFiles

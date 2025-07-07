@@ -20,12 +20,10 @@
 
 namespace analyser::metric::metric_impl
 {
-
     struct CyclomaticComplexityMetric : IMetric
     {
     protected:
         std::string Name() const final;
         MetricResult::ValueType CalculateImpl(const function::Function &f) const final;
     };
-
 } // namespace analyser::metric::metric_impl

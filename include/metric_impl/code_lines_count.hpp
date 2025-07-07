@@ -18,12 +18,12 @@
 
 #include "metric.hpp"
 
-namespace analyser::metric::metric_impl {
-
-struct CodeLinesCountMetric final : IMetric {
-protected:
-    MetricResult::ValueType CalculateImpl(const function::Function &f) const final;
-    std::string Name() const final;
-};
-
-}  // namespace analyser::metric::metric_impl
+namespace analyser::metric::metric_impl
+{
+    struct CodeLinesCountMetric final : IMetric
+    {
+    protected:
+        MetricResult::ValueType CalculateImpl(const function::Function &f) const final;
+        std::string Name() const final;
+    };
+} // namespace analyser::metric::metric_impl

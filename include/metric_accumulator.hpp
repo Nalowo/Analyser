@@ -36,19 +36,30 @@ protected:
 
 struct MetricsAccumulator {
     template <typename Accumulator>
+    requires std::is_base_of_v<IAccumulator, Accumulator>
     void RegisterAccumulator(const std::string &metric_name, std::unique_ptr<Accumulator> acc) {
-        // здесь ваш код
+        if (auto [it, status] = _accumulators.emplace(metric_name, std::move(acc)); !status) 
+            throw std::runtime_error("Accumulator: " + metric_name + " already exists");
     }
+
     template <typename Accumulator>
+    requires std::is_base_of_v<IAccumulator, Accumulator>
     const Accumulator &GetFinalizedAccumulator(const std::string &metric_name) const {
-        // здесь ваш код
+        auto it = _accumulators.find(metric_name);
+        if (it == _accumulators.end())
+            throw std::runtime_error("Accumulator: " + metric_name + " does not exist");
+
+        auto& derived = std::dynamic_pointer_cast<Accumulator>(it->second); 
+        if (!derived->is_finalized)
+            derived->Finalize();
+
+        return *derived;
     }
     void AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const;
-
     void ResetAccumulators();
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<IAccumulator>> accumulators;
+    std::unordered_map<std::string, std::shared_ptr<IAccumulator>> _accumulators;
 };
 
 }  // namespace analyser::metric_accumulator
