@@ -53,7 +53,7 @@ namespace analyser::metric::metric_impl
 
     std::string CountParametersMetric::Name() const
     {
-        return "ParametersCountMetric";
+        return "CountParametersMetric";
     }
 
 } // namespace analyser::metric::metric_impl

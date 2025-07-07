@@ -31,7 +31,6 @@ namespace analyser::metric::metric_impl
         "else_clause",
         "while_statement",
         "for_statement",
-        "for_in_clause",
         "try_statement",
         "except_clause",
         "finally_clause",

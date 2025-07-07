@@ -30,6 +30,11 @@ struct IAccumulator {
     virtual void Reset() = 0;
     virtual ~IAccumulator() = default;
 
+    bool IsFinalized() const noexcept
+    {
+        return is_finalized;
+    }
+
 protected:
     bool is_finalized = false;
 };
@@ -49,11 +54,11 @@ struct MetricsAccumulator {
         if (it == _accumulators.end())
             throw std::runtime_error("Accumulator: " + metric_name + " does not exist");
 
-        auto& derived = std::dynamic_pointer_cast<Accumulator>(it->second); 
-        if (!derived->is_finalized)
-            derived->Finalize();
+        auto ptr = std::dynamic_pointer_cast<Accumulator>(it->second); 
+        if (!ptr->IsFinalized())
+            ptr->Finalize();
 
-        return *derived;
+        return *ptr;
     }
     void AccumulateNextFunctionResults(const std::vector<metric::MetricResult> &metric_results) const;
     void ResetAccumulators();
