@@ -36,6 +36,7 @@
             "args": [
                 "-f",
                 "${workspaceFolder}/files/sample.py"
+                // "${workspaceFolder}/src/metric_impl/tests/files/if.py"
             ],
             "cwd": "${workspaceFolder}/build"
         }

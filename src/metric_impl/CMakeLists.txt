@@ -22,3 +22,6 @@ foreach(file IN LISTS test_files)
 endforeach()
 
 add_test(NAME ${target} COMMAND ${target})
+
+set(TEST_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/files")
+target_compile_definitions(${target} PRIVATE TEST_FILES_DIR="${TEST_FILES_DIR}" )

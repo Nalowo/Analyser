@@ -47,7 +47,7 @@ namespace analyser::metric::metric_impl
 
     MetricResult::ValueType CyclomaticComplexityMetric::CalculateImpl(const function::Function &f) const
     {
-        static const std::regex regex{R"((\b[a-zA-Z_][a-zA-Z_0-9]*\b))"};
+        static const std::regex regex{R"(\b[a-zA-Z_][a-zA-Z_0-9]*\b)"};
         MetricResult::ValueType res{0};
         std::string_view bodyAst = f.ast;
         if (auto pos = bodyAst.find("(block"); pos != std::string_view::npos)
@@ -65,9 +65,7 @@ namespace analyser::metric::metric_impl
         res = rs::count_if(words, [](const auto& w)
         {
             std::string_view str{std::to_address(w.first), static_cast<size_t>(w.length())};
-            if (countWordsList.contains(str))
-                return true;
-            return false;
+            return countWordsList.contains(str);
         }) + 1;
 
         return res;
