@@ -19,6 +19,8 @@ add_library(metric
 target_link_libraries(metric
     PUBLIC
         function
+        range-v3::range-v3
+        Boost::headers
 )
 
 add_library(metric_accumulator
